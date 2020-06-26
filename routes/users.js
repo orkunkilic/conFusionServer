@@ -10,8 +10,14 @@ const Userrouter = express.Router();
 Userrouter.use(bodyParser.json());
 
 /* GET users listing. */
-Userrouter.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+Userrouter.get('/', authenticate.verifyUser, authenticate.verifyAdmin, function(req, res, next) {
+  User.find({})
+  .then((dishes) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(dishes);
+    }, (err) => next(err))
+    .catch((err) => next(err));
 });
 
 Userrouter.route('/signup')
@@ -51,7 +57,7 @@ Userrouter.post('/login', passport.authenticate('local'), (req, res) => {
   res.json({success: true, token: token,  status: 'You are successfully logged in!'});
 });
 
-Userrouter.get('/logout', (req,res) => {
+Userrouter.get('/logout', (req,res, next) => {
   if(req.session) {
     req.session.destroy();
     res.clearCookie('session-id');

@@ -37,12 +37,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(function(req, res, next) {
-  if (req.headers['content-type'] === 'application/json;') {
-    req.headers['content-type'] = 'application/json';
-  }
-  next();
-});
 app.use(logger('dev'));
 app.use(express.json());
 //app.use(cookieParser('12345-67890-09876-54321'));
