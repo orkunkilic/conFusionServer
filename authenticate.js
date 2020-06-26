@@ -46,4 +46,5 @@ exports.verifyAdmin = function(req,res,next) {
     }
 }
 
+
 exports.verifyUser = passport.authenticate('jwt', {session: false});
